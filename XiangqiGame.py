@@ -443,8 +443,8 @@ class XiangqiGame:
             self._players_turn = "RED"
 
 
-game = XiangqiGame()
-game.print_board()
+# game = XiangqiGame()
+# game.print_board()
 # print(game.get_game_state())
 # # game.print_board()
 # print(game.is_in_check("REd"))
@@ -501,23 +501,24 @@ game.print_board()
 # print()
 # game.print_board()
 
-game.make_move("c1", "a3")
-print()
-game.print_board()
-
-game.make_move("c10", "a8")
-print()
-game.print_board()
-
-game.make_move("a3", "c5")
-print()
-game.print_board()
-
-game.make_move("a8", "c6")
-print()
-game.print_board()
-
-game.make_move("c5", "a7")
-print()
-game.print_board()
+# test elephant moves
+# game.make_move("c1", "a3")
+# print()
+# game.print_board()
+#
+# game.make_move("c10", "a8")
+# print()
+# game.print_board()
+#
+# game.make_move("a3", "c5")
+# print()
+# game.print_board()
+#
+# game.make_move("a8", "c6")
+# print()
+# game.print_board()
+#
+# game.make_move("c5", "a7")
+# print()
+# game.print_board()
 
