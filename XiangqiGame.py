@@ -151,6 +151,8 @@ class XiangqiGame:
         if self._board[move_from_row][move_from_column][1:4] == "SOL":
             self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
+        return True
+
         # MAKE A SELF._MOVE_COMPLETED AND IF IT WAS COMPLETED AND THE GENERAL IS IN THE MOVE TO LOCATION
         # THEN MAKE THAT GENERAL IN CHECK.  THIS MIGHT ELIMINATE THE NEED FOR THE IN CHECK METHOD.
         # THEN WE JUST NEED THE IN CHECKMATE METHOD TO DETERMINE IF THERE IS ANY MOVE THAT CAN TAKE THE
