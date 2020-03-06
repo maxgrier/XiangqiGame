@@ -350,7 +350,6 @@ class XiangqiGame:
                 self._board[move_to_row][move_to_column][0] == "B":
             return False
         # Make sure there isn't a similar color piece in the way
-        print("move to", self._board[move_to_row][move_to_column])
         if self._board[move_from_row][move_from_column][0] == "R" and \
                 self._board[move_to_row][move_to_column][0] == "R":
             return False
@@ -362,8 +361,6 @@ class XiangqiGame:
         elif self._players_turn == "BLACK":
             self._players_turn = "RED"
 
-
-
     def horse_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
         Creates the function for the horses' move.
@@ -373,6 +370,62 @@ class XiangqiGame:
         :param move_to_column:
         :return:
         """
+        # Checks that the move is no more than two squares.
+        if abs(move_to_column - move_from_column) > 2:
+            return False
+        if abs(move_to_row - move_from_row) > 2:
+            return False
+        if move_to_row == move_from_row:
+            return False
+        if move_from_column == move_to_column:
+            return False
+        if abs(move_to_column - move_from_column) < 2:
+            if abs(move_to_row - move_from_row) < 2:
+                return False
+        if abs(move_to_row - move_from_row) < 2:
+            if abs(move_to_column - move_from_column) < 2:
+                return False
+        # Checks to see if a piece is blocking the horse
+        if move_to_column - move_from_column > 0:
+            if move_to_row - move_from_row > 1:
+                if self._board[move_from_row + 1][move_from_column] != "    ":
+                    return False
+        if move_to_column - move_from_column < 1:
+            if move_to_row - move_from_row < 1:
+                if self._board[move_from_row - 1][move_from_column] != "    ":
+                    return False
+                # elif self._board[move_from_row][move_from_column - 1] != "    ":
+                #     return False
+        if move_to_column - move_from_column > 0:
+            if move_to_row - move_from_row < 1:
+                if self._board[move_from_row - 1][move_from_column] != "    ":
+                    return False
+        if move_to_column - move_from_column < 1:
+            if move_to_row - move_from_row > 1:
+                if self._board[move_from_row + 1][move_from_column] != "    ":
+                    return False
+        # if there is a piece to the left.
+        if move_to_column - move_from_column == -2:
+            if self._board[move_from_row][move_from_column - 1] != "    ":
+                return False
+        if move_to_column - move_from_column == 2:
+            if self._board[move_from_row][move_from_column + 1] != "    ":
+                return False
+        # Make sure there isn't a similar color piece in the way
+        if self._board[move_from_row][move_from_column][0] == "B" and \
+                self._board[move_to_row][move_to_column][0] == "B":
+            return False
+        # Make sure there isn't a similar color piece in the way
+        if self._board[move_from_row][move_from_column][0] == "R" and \
+                self._board[move_to_row][move_to_column][0] == "R":
+            return False
+        # Else.
+        self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
+        self._board[move_from_row][move_from_column] = "    "
+        if self._players_turn == "RED":
+            self._players_turn = "BLACK"
+        elif self._players_turn == "BLACK":
+            self._players_turn = "RED"
 
     def chariot_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -403,8 +456,6 @@ class XiangqiGame:
         :param move_to_column:
         :return:
         """
-        print("from", self._board[move_from_row][move_from_column])
-        print("to", self._board[move_to_row][move_to_column])
         # Makes sure the column move isn't greater than one space.
         if abs(move_to_column - move_from_column) > 1:
             return False
@@ -522,3 +573,26 @@ class XiangqiGame:
 # print()
 # game.print_board()
 
+# Horse stuff
+# game.make_move("b1", "c3")
+# # print()
+# # game.print_board()
+#
+# game.make_move("b10", "a8")
+# print()
+# game.print_board()
+#
+# game.make_move("c3", "e2")
+# print()
+# game.print_board()
+#
+# game.make_move("a8", "b10")
+# print()
+# game.print_board()
+
+
+# game = XiangqiGame()
+# move_result = game.make_move('c1', 'e3')
+# black_in_check = game.is_in_check('black')
+# game.make_move('e7', 'e6')
+# state = print(game.get_game_state())
