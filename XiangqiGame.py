@@ -222,7 +222,7 @@ class XiangqiGame:
             self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
             move_completed = self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
-        return move_completed
+        return True
 
         # if self.red_general_in_check() is True:
         #     self._red_in_check = True
