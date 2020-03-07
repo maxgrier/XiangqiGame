@@ -16,14 +16,14 @@ class XiangqiGame:
         and if red is in check.
         """
         self._board = [['RCHA', 'RHOR', 'RELE', 'RADV', 'RGEN', 'RADV', 'RELE', 'RHOR', 'RCHA'],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', 'BSOL', '    ', '    ', '    ', '    '],
                        ['    ', 'RCAN', '    ', '    ', '    ', '    ', '    ', 'RCAN', '    '],
                        ['RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL'],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL'],
                        ['    ', 'BCAN', '    ', '    ', '    ', '    ', '    ', 'BCAN', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', 'RSOL', '    ', '    ', '    ', '    '],
                        ['BCHA', 'BHOR', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', 'BHOR', 'BCHA']]
         self._game_state = "UNFINISHED"
         self._players_turn = "RED"
@@ -68,17 +68,80 @@ class XiangqiGame:
         :return: True or False.
         """
         if player_color.lower() == "red":
-            return self._red_in_check
-        if player_color.lower() == "black":
-            return self._black_in_check
-        else:
-            print("Please enter a valid color.")
+            return self.red_general_in_check()
+        elif player_color.lower() == "black":
+            return self.black_general_in_check()
 
-    def general_in_check(self):
+    def black_general_in_check(self):
         """
         This function will cycle through the pieces to determine if the general is in check.
         :return: True or False
         """
+        is_general_in_check = False
+        amount_pieces_can_check = 0
+        pieces_can_check = []
+        # Check if black general is in check
+        for row in range(10):
+            for column in range(9):
+                if self._board[row][column] == "RCHA":
+                    if self.chariot_move(row, column, self._black_general_row, self._black_general_column) is True:
+                        amount_pieces_can_check += 1
+                        pieces_can_check += "RCHA"
+                        self._board[row][column] = "RCHA"
+                        self._board[self._black_general_row][self._black_general_column] = "BGEN"
+                if self._board[row][column] == "RHOR":
+                    if self.horse_move(row, column, self._black_general_row, self._black_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "RHOR"
+                        self._board[self._black_general_row][self._black_general_column] = "BGEN"
+                if self._board[row][column] == "RCAN":
+                    if self.cannon_move(row, column, self._black_general_row, self._black_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "RCAN"
+                        self._board[self._black_general_row][self._black_general_column] = "BGEN"
+                if self._board[row][column] == "RSOL":
+                    if self.soldier_move(row, column, self._black_general_row, self._black_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "RSOL"
+                        self._board[self._black_general_row][self._black_general_column] = "BGEN"
+        if amount_pieces_can_check > 0:
+            return True
+        else:
+            return False
+
+    def red_general_in_check(self):
+        """
+        This function will cycle through the pieces to determine if the general is in check.
+        :return: True or False
+        """
+        is_general_in_check = False
+        amount_pieces_can_check = 0
+        for row in range(10):
+            for column in range(9):
+                if self._board[row][column] == "BCHA":
+                    if self.chariot_move(row, column, self._red_general_row, self._red_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "BCHA"
+                        self._board[self._red_general_row][self._red_general_column] = "RGEN"
+                if self._board[row][column] == "BHOR":
+                    if self.horse_move(row, column, self._red_general_row, self._red_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "BHOR"
+                        self._board[self._red_general_row][self._red_general_column] = "RGEN"
+                if self._board[row][column] == "BCAN":
+                    if self.cannon_move(row, column, self._red_general_row, self._red_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "BCAN"
+                        self._board[self._red_general_row][self._red_general_column] = "RGEN"
+                if self._board[row][column] == "BSOL":
+                    if self.soldier_move(row, column, self._red_general_row, self._red_general_column) is True:
+                        amount_pieces_can_check += 1
+                        self._board[row][column] = "BSOL"
+                        self._board[self._red_general_row][self._red_general_column] = "BGEN"
+        if amount_pieces_can_check > 0:
+            return True
+        else:
+            return False
 
     def checkmate(self):
         """
@@ -151,7 +214,11 @@ class XiangqiGame:
         if self._board[move_from_row][move_from_column][1:4] == "SOL":
             self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
-        return True
+        # if self.red_general_in_check() is True:
+        #     self._red_in_check = True
+        # if self.black_general_in_check() is True:
+        #     self._black_in_check = True
+        #return True
 
         # MAKE A SELF._MOVE_COMPLETED AND IF IT WAS COMPLETED AND THE GENERAL IS IN THE MOVE TO LOCATION
         # THEN MAKE THAT GENERAL IN CHECK.  THIS MIGHT ELIMINATE THE NEED FOR THE IN CHECK METHOD.
@@ -249,12 +316,14 @@ class XiangqiGame:
                 self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
                 self._board[move_from_row][move_from_column] = "    "
                 self._players_turn = "RED"
+                return True
             if self._board[move_from_row][move_from_column] == "RGEN":
                 self._red_general_row = move_to_row
                 self._red_general_column = move_to_column
                 self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
                 self._board[move_from_row][move_from_column] = "    "
                 self._players_turn = "BLACK"
+                return True
 
     def advisor_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -309,6 +378,7 @@ class XiangqiGame:
                 self._players_turn = "BLACK"
             elif self._players_turn == "BLACK":
                 self._players_turn = "RED"
+            return True
 
     def elephant_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -362,6 +432,7 @@ class XiangqiGame:
             self._players_turn = "BLACK"
         elif self._players_turn == "BLACK":
             self._players_turn = "RED"
+        return True
 
     def horse_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -428,6 +499,7 @@ class XiangqiGame:
             self._players_turn = "BLACK"
         elif self._players_turn == "BLACK":
             self._players_turn = "RED"
+        return True
 
     def chariot_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -438,6 +510,68 @@ class XiangqiGame:
         :param move_to_column:
         :return:
         """
+        # Makes sure the chariot is moving along the same row or column.
+        if move_to_column != move_from_column:
+            if move_to_row != move_from_row:
+                return False
+        if move_to_row != move_from_row:
+            if move_to_column != move_from_column:
+                return False
+        if abs(move_to_column - move_from_column) > 8:
+            return False
+        if abs(move_to_row - move_from_row) > 9:
+            return False
+        # Makes sure there are no pieces in the way when moving.
+        if self._board[move_from_row][move_from_column][0] == "R":
+            if move_to_row - move_from_row > 0:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row + 1, move_to_row + 1):
+                    if self._board[row][move_from_column][0] == "R":
+                        return False
+            if move_to_row - move_from_row < 0:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row - 1, move_to_row - 1, -1):
+                    if self._board[row][move_from_column][0] == "R":
+                        return False
+            if move_to_column - move_from_column > 0:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column + 1, move_to_column + 1):
+                    if self._board[move_from_row][column][0] == "R":
+                        return False
+            if move_to_column - move_from_column < 1:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column - 1, move_to_column - 1, -1):
+                    if self._board[move_from_row][column][0] == "R":
+                        return False
+        if self._board[move_from_row][move_from_column][0] == "B":
+            if move_to_row - move_from_row > 1:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row + 1, move_to_row + 1):
+                    if self._board[row][move_from_column][0] == "B":
+                        return False
+            if move_to_row - move_from_row < 0:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row - 1, move_to_row - 1, -1):
+                    if self._board[row][move_from_column][0] == "B":
+                        return False
+            if move_to_column - move_from_column > 0:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column + 1, move_to_column + 1):
+                    if self._board[move_from_row][column][0] == "B":
+                        return False
+            if move_to_column - move_from_column < 1:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column - 1, move_to_column - 1, -1):
+                    if self._board[move_from_row][column][0] == "B":
+                        return False
+        # Else.
+        self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
+        self._board[move_from_row][move_from_column] = "    "
+        if self._players_turn == "RED":
+            self._players_turn = "BLACK"
+        elif self._players_turn == "BLACK":
+            self._players_turn = "RED"
+        return True
 
     def cannon_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -448,6 +582,128 @@ class XiangqiGame:
         :param move_to_column:
         :return:
         """
+        piece_count = 0
+        # Makes sure the cannon is moving along the same row or column.
+        if move_to_column != move_from_column:
+            if move_to_row != move_from_row:
+                return False
+        if move_to_row != move_from_row:
+            if move_to_column != move_from_column:
+                return False
+        if abs(move_to_column - move_from_column) > 8:
+            return False
+        if abs(move_to_row - move_from_row) > 9:
+            return False
+        # Checks if there is a piece in between to allow a capture.
+        if self._board[move_from_row][move_from_column][0] == "R":
+            if self._board[move_to_row][move_to_column][0] == "B":
+                piece_count = 0
+                if move_to_row - move_from_row > 0:
+                    for row in range(move_from_row + 1, move_to_row):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_row - move_from_row < 0:
+                    for row in range(move_from_row - 1, move_to_row - 1, -1):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column > 0:
+                    for column in range(move_from_column + 1, move_to_column + 1):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column < 1:
+                    for column in range(move_from_column - 1, move_to_column - 1, -1):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if piece_count == 1:
+                    self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
+                    self._board[move_from_row][move_from_column] = "    "
+                    if self._players_turn == "RED":
+                        self._players_turn = "BLACK"
+                    elif self._players_turn == "BLACK":
+                        self._players_turn = "RED"
+                    return True
+                else:
+                    return False
+        # Checks if there is a piece in between to allow a capture.
+        if self._board[move_from_row][move_from_column][0] == "B":
+            if self._board[move_to_row][move_to_column][0] == "R":
+                piece_count = 0
+                if move_to_row - move_from_row > 0:
+                    for row in range(move_from_row + 1, move_to_row + 1):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_row - move_from_row < 0:
+                    for row in range(move_from_row - 1, move_to_row, -1):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column > 0:
+                    for column in range(move_from_column + 1, move_to_column + 1):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column < 1:
+                    for column in range(move_from_column - 1, move_to_column - 1, -1):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if piece_count == 1:
+                    self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
+                    self._board[move_from_row][move_from_column] = "    "
+                    if self._players_turn == "RED":
+                        self._players_turn = "BLACK"
+                    elif self._players_turn == "BLACK":
+                        self._players_turn = "RED"
+                    return True
+                else:
+                    return False
+        # Makes sure there are no pieces in the way when moving.
+        if self._board[move_from_row][move_from_column][0] == "R":
+            if move_to_row - move_from_row > 0:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row + 1, move_to_row + 1):
+                    if self._board[row][move_from_column][0] == "R":
+                        return False
+            if move_to_row - move_from_row < 0:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row - 1, row_distance + 1, -1):
+                    if self._board[row][move_from_column][0] == "R":
+                        return False
+            if move_to_column - move_from_column > 0:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column + 1, move_to_column + 1):
+                    if self._board[move_from_row][column][0] == "R":
+                        return False
+            if move_to_column - move_from_column < 1:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column - 1, move_to_column - 1, -1):
+                    if self._board[move_from_row][column][0] == "R":
+                        return False
+        if self._board[move_from_row][move_from_column][0] == "B":
+            if move_to_row - move_from_row > 1:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row + 1, move_to_row + 1):
+                    if self._board[row][move_from_column][0] == "B":
+                        return False
+            if move_to_row - move_from_row < 0:
+                row_distance = move_to_row - move_from_row
+                for row in range(move_from_row - 1, move_to_row, -1):
+                    if self._board[row][move_from_column][0] == "B":
+                        return False
+            if move_to_column - move_from_column > 0:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column + 1, move_to_column + 1):
+                    if self._board[move_from_row][column][0] == "B":
+                        return False
+            if move_to_column - move_from_column < 1:
+                column_distance = move_to_column - move_from_column
+                for column in range(move_from_column - 1, move_to_column - 1, -1):
+                    if self._board[move_from_row][column][0] == "B":
+                        return False
+        self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
+        self._board[move_from_row][move_from_column] = "    "
+        if self._players_turn == "RED":
+            self._players_turn = "BLACK"
+        elif self._players_turn == "BLACK":
+            self._players_turn = "RED"
+        return True
 
     def soldier_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
         """
@@ -494,6 +750,7 @@ class XiangqiGame:
             self._players_turn = "BLACK"
         elif self._players_turn == "BLACK":
             self._players_turn = "RED"
+        return True
 
 
 # game = XiangqiGame()
@@ -598,3 +855,46 @@ class XiangqiGame:
 # black_in_check = game.is_in_check('black')
 # game.make_move('e7', 'e6')
 # state = print(game.get_game_state())
+
+# Chariot moves
+# game.make_move("a1", "a2")
+# print()
+# game.print_board()
+#
+# game.make_move("a10", "a9")
+# print()
+# game.print_board()
+#
+# game.make_move("a2", "g2")
+# print()
+# game.print_board()
+#
+# game.make_move("a9", "a8")
+# print()
+# game.print_board()
+#
+# game.make_move("g2", "g1")
+# print()
+# game.print_board()
+
+# Cannon moves
+# game.make_move("b3", "b10")
+# print()
+# game.print_board()
+#
+# game.make_move("h8", "h1")
+# print()
+# game.print_board()
+#
+# game.make_move("e5", "e10")
+# print()
+# game.print_board()
+
+# game.make_move("e8", "e9")
+# print()
+# game.print_board()
+
+# print(game.is_in_check("black"))
+# print()
+# game.print_board()
+
