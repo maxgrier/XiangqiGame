@@ -16,14 +16,14 @@ class XiangqiGame:
         and if red is in check.
         """
         self._board = [['RCHA', 'RHOR', 'RELE', 'RADV', 'RGEN', 'RADV', 'RELE', 'RHOR', 'RCHA'],
-                       ['    ', '    ', '    ', '    ', 'BSOL', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['    ', 'RCAN', '    ', '    ', '    ', '    ', '    ', 'RCAN', '    '],
                        ['RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL'],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL'],
                        ['    ', 'BCAN', '    ', '    ', '    ', '    ', '    ', 'BCAN', '    '],
-                       ['    ', '    ', '    ', '    ', 'RSOL', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['BCHA', 'BHOR', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', 'BHOR', 'BCHA']]
         self._game_state = "UNFINISHED"
         self._players_turn = "RED"
@@ -189,31 +189,40 @@ class XiangqiGame:
 
         # If the piece being moved is a general, it will call the general_move function.
         if self._board[move_from_row][move_from_column][1:4] == "GEN":
-            return self.general_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.general_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.general_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an advisor, it will call the advisor_move function.
         if self._board[move_from_row][move_from_column][1:4] == "ADV":
-            return self.advisor_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.advisor_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.advisor_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an elephant, it will call the elephant_move function.
         if self._board[move_from_row][move_from_column][1:4] == "ELE":
-            return self.elephant_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.elephant_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.elephant_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is a horse, it will call the horse_move function.
         if self._board[move_from_row][move_from_column][1:4] == "HOR":
-            return self.horse_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.horse_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.horse_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an chariot, it will call the chariot_move function.
         if self._board[move_from_row][move_from_column][1:4] == "CHA":
-            return self.chariot_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.chariot_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.chariot_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an cannon, it will call the cannon_move function.
         if self._board[move_from_row][move_from_column][1:4] == "CAN":
-            return self.cannon_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.cannon_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.cannon_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an soldier, it will call the soldier_move function.
         if self._board[move_from_row][move_from_column][1:4] == "SOL":
-            return self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            move_completed = self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
+
+        return move_completed
 
         # if self.red_general_in_check() is True:
         #     self._red_in_check = True
@@ -899,3 +908,11 @@ class XiangqiGame:
 # print()
 # game.print_board()
 
+# game = XiangqiGame()
+# move_result = game.make_move('c1', 'e3')
+# print(move_result)
+# black_in_check = game.is_in_check('black')
+# print(game.make_move('e7', 'e6'))
+# state = game.get_game_state()
+#
+# game.print_board()
