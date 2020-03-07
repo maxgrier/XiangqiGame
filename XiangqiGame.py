@@ -158,6 +158,7 @@ class XiangqiGame:
         :param move_to: The position to move to.
         :return: True of False.
         """
+        move_completed = False
         move_from_column = None
         move_from_row = None
         move_to_column = None
@@ -188,31 +189,31 @@ class XiangqiGame:
 
         # If the piece being moved is a general, it will call the general_move function.
         if self._board[move_from_row][move_from_column][1:4] == "GEN":
-            self.general_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.general_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an advisor, it will call the advisor_move function.
         if self._board[move_from_row][move_from_column][1:4] == "ADV":
-            self.advisor_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.advisor_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an elephant, it will call the elephant_move function.
         if self._board[move_from_row][move_from_column][1:4] == "ELE":
-            self.elephant_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.elephant_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is a horse, it will call the horse_move function.
         if self._board[move_from_row][move_from_column][1:4] == "HOR":
-            self.horse_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.horse_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an chariot, it will call the chariot_move function.
         if self._board[move_from_row][move_from_column][1:4] == "CHA":
-            self.chariot_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.chariot_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an cannon, it will call the cannon_move function.
         if self._board[move_from_row][move_from_column][1:4] == "CAN":
-            self.cannon_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.cannon_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # If the piece being moved is an soldier, it will call the soldier_move function.
         if self._board[move_from_row][move_from_column][1:4] == "SOL":
-            self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
+            return self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
         # if self.red_general_in_check() is True:
         #     self._red_in_check = True
