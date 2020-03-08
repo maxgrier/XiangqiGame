@@ -18,26 +18,26 @@ class XiangqiGame:
         Set the board to it's default status, as well as set game state, players turn, if black is in check
         and if red is in check.
         """
-        # self._board = [['RCHA', 'RHOR', 'RELE', 'RADV', 'RGEN', 'RADV', 'RELE', 'RHOR', 'RCHA'],
+        self._board = [['RCHA', 'RHOR', 'RELE', 'RADV', 'RGEN', 'RADV', 'RELE', 'RHOR', 'RCHA'],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', 'RCAN', '    ', '    ', '    ', '    ', '    ', 'RCAN', '    '],
+                       ['RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL'],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL'],
+                       ['    ', 'BCAN', '    ', '    ', '    ', '    ', '    ', 'BCAN', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['BCHA', 'BHOR', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', 'BHOR', 'BCHA']]
+        # self._board = [['    ', '    ', '    ', '    ', 'RGEN', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', '    ', 'RCAN', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', '    ', 'RCHA', '    ', '    ', '    ', '    ', '    '],
         #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', 'RCAN', '    ', '    ', '    ', '    ', '    ', 'RCAN', '    '],
-        #                ['RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL'],
         #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
         #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL'],
-        #                ['    ', 'BCAN', '    ', '    ', '    ', '    ', '    ', 'BCAN', '    '],
         #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['BCHA', 'BHOR', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', 'BHOR', 'BCHA']]
-        self._board = [['    ', '    ', '    ', '    ', 'RGEN', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', 'RCAN', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', 'RCHA', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', 'BGEN', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ']]
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', '    ', 'BGEN', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ']]
         self._game_state = "UNFINISHED"
         self._players_turn = "RED"
         self._black_in_check = False
@@ -1022,7 +1022,7 @@ class XiangqiGame:
 # print()
 # game.print_board()
 
-game = XiangqiGame()
+# game = XiangqiGame()
 # move_result = game.make_move('c1', 'e3')
 # print(move_result)
 # black_in_check = game.is_in_check('black')
