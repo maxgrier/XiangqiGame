@@ -4,6 +4,9 @@
 # It will contain various functions that will hold the rules to each piece's move abilities
 # and keep track of the game state throughout the game until it is finished.
 
+# *** MAKE SURE TO KEEP PLAYER TURN THE SAME AFTER CHECKING FOR CHECK AND CHECKMATE**
+
+from copy import deepcopy
 
 class XiangqiGame:
     """
@@ -15,28 +18,40 @@ class XiangqiGame:
         Set the board to it's default status, as well as set game state, players turn, if black is in check
         and if red is in check.
         """
-        self._board = [['RCHA', 'RHOR', 'RELE', 'RADV', 'RGEN', 'RADV', 'RELE', 'RHOR', 'RCHA'],
+        # self._board = [['RCHA', 'RHOR', 'RELE', 'RADV', 'RGEN', 'RADV', 'RELE', 'RHOR', 'RCHA'],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', 'RCAN', '    ', '    ', '    ', '    ', '    ', 'RCAN', '    '],
+        #                ['RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL'],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL'],
+        #                ['    ', 'BCAN', '    ', '    ', '    ', '    ', '    ', 'BCAN', '    '],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['BCHA', 'BHOR', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', 'BHOR', 'BCHA']]
+        self._board = [['    ', '    ', '    ', '    ', 'RGEN', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', 'RCAN', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', 'RCHA', '    ', '    ', '    ', '    ', '    '],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['    ', 'RCAN', '    ', '    ', '    ', '    ', '    ', 'RCAN', '    '],
-                       ['RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL', '    ', 'RSOL'],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL', '    ', 'BSOL'],
-                       ['    ', 'BCAN', '    ', '    ', '    ', '    ', '    ', 'BCAN', '    '],
                        ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-                       ['BCHA', 'BHOR', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', 'BHOR', 'BCHA']]
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', 'BGEN', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ']]
         self._game_state = "UNFINISHED"
         self._players_turn = "RED"
         self._black_in_check = False
         self._red_in_check = False
+        self._pieces_can_check_black = []
+        self._pieces_can_check_red = []
 
         # # Set the red general position.
         self._red_general_row = 0
         self._red_general_column = 4
 
         # # Set black general position.
-        self._black_general_row = 9
-        self._black_general_column = 4
+        self._black_general_row = 8
+        self._black_general_column = 3
 
     def print_board(self):
         """
@@ -79,34 +94,48 @@ class XiangqiGame:
         """
         is_general_in_check = False
         amount_pieces_can_check = 0
-        pieces_can_check = []
+        self._pieces_can_check_black = []
+        board_before = deepcopy(self._board)
         # Check if black general is in check
         for row in range(10):
             for column in range(9):
                 if self._board[row][column] == "RCHA":
                     if self.chariot_move(row, column, self._black_general_row, self._black_general_column) is True:
                         amount_pieces_can_check += 1
-                        pieces_can_check += "RCHA"
+                        self._pieces_can_check_black.append("RCHA")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "RCHA"
                         self._board[self._black_general_row][self._black_general_column] = "BGEN"
                 if self._board[row][column] == "RHOR":
                     if self.horse_move(row, column, self._black_general_row, self._black_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_black.append("RHOR")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "RHOR"
                         self._board[self._black_general_row][self._black_general_column] = "BGEN"
                 if self._board[row][column] == "RCAN":
                     if self.cannon_move(row, column, self._black_general_row, self._black_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_black.append("RCAN")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "RCAN"
                         self._board[self._black_general_row][self._black_general_column] = "BGEN"
                 if self._board[row][column] == "RSOL":
                     if self.soldier_move(row, column, self._black_general_row, self._black_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_black.append("RSOL")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "RSOL"
                         self._board[self._black_general_row][self._black_general_column] = "BGEN"
         if amount_pieces_can_check > 0:
+            self._board = board_before
             return True
         else:
+            self._board = board_before
             return False
 
     def red_general_in_check(self):
@@ -116,26 +145,39 @@ class XiangqiGame:
         """
         is_general_in_check = False
         amount_pieces_can_check = 0
+        self._pieces_can_check_red = []
         for row in range(10):
             for column in range(9):
                 if self._board[row][column] == "BCHA":
                     if self.chariot_move(row, column, self._red_general_row, self._red_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_red.append("BCHA")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "BCHA"
                         self._board[self._red_general_row][self._red_general_column] = "RGEN"
                 if self._board[row][column] == "BHOR":
                     if self.horse_move(row, column, self._red_general_row, self._red_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_red.append("RHOR")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "BHOR"
                         self._board[self._red_general_row][self._red_general_column] = "RGEN"
                 if self._board[row][column] == "BCAN":
                     if self.cannon_move(row, column, self._red_general_row, self._red_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_red.append("BCAN")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "BCAN"
                         self._board[self._red_general_row][self._red_general_column] = "RGEN"
                 if self._board[row][column] == "BSOL":
                     if self.soldier_move(row, column, self._red_general_row, self._red_general_column) is True:
                         amount_pieces_can_check += 1
+                        self._pieces_can_check_red.append("BSOL")
+                        self._pieces_can_check_black.append(row)
+                        self._pieces_can_check_black.append(column)
                         self._board[row][column] = "BSOL"
                         self._board[self._red_general_row][self._red_general_column] = "BGEN"
         if amount_pieces_can_check > 0:
@@ -143,12 +185,92 @@ class XiangqiGame:
         else:
             return False
 
-    def checkmate(self):
+    def black_checkmate(self):
         """
         This function will try all possible moves for the remaining pieces and then determine
         if there are any moves that can take the general out of check.
         :return: True or False
         """
+        # for piece in self._pieces_can_check_black:
+        #     if piece == "RCHA":
+        # print(self._pieces_can_check_black)
+        board_before = deepcopy(self._board)
+        general_row_before = self._black_general_row
+        general_column_before = self._black_general_column
+        self.black_general_in_check()
+        checkmate = True
+        piece_location = []
+        piece_count = 0
+        pieces_checked = 0
+        r = 0
+        c = 1
+        print(self._pieces_can_check_black)
+        for element in self._pieces_can_check_black:
+            if type(element) == str:
+                piece_count += 1
+            if type(element) == int:
+                piece_location.append(element)
+
+        for row in range(10):
+            for column in range(9):
+                if self._board[row][column] == "BGEN":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.general_move(row, column, row_position, column_position) is True:
+                                self._black_general_row = row_position
+                                self._black_general_column = column_position
+                                if self.black_general_in_check() is False:
+                                    print("here")
+                                    print("row_posisiton", row_position)
+                                    print("column_position", column_position)
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+                                self._black_general_row = general_row_before
+                                self._black_general_column = general_column_before
+                if self._board[row][column] == "BADV":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.advisor_move(row, column, row_position, column_position) is True:
+                                if self.black_general_in_check() is False:
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+                if self._board[row][column] == "BELE":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.elephant_move(row, column, row_position, column_position) is True:
+                                if self.black_general_in_check() is False:
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+                if self._board[row][column] == "BHOR":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.horse_move(row, column, row_position, column_position) is True:
+                                if self.black_general_in_check() is False:
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+                if self._board[row][column] == "BCHA":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.chariot_move(row, column, row_position, column_position) is True:
+                                if self.black_general_in_check() is False:
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+                if self._board[row][column] == "BCAN":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.cannon_move(row, column, row_position, column_position) is True:
+                                if self.black_general_in_check() is False:
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+                if self._board[row][column] == "BSOL":
+                    for row_position in range(10):
+                        for column_position in range(9):
+                            if self.soldier_move(row, column, row_position, column_position) is True:
+                                if self.black_general_in_check() is False:
+                                    checkmate = False
+                                self._board = deepcopy(board_before)
+
+        return checkmate
 
     def make_move(self, move_from, move_to):
         """
@@ -265,10 +387,10 @@ class XiangqiGame:
         if abs(move_to_row - move_from_row) > 1:
             return False
         # Makes sure the move is within the palace.
-        if move_from_column < 3 or move_from_column > 6:
+        if move_from_column < 3 or move_from_column > 5:
             return False
         # Makes sure the move is within the palace.
-        if move_to_column < 3 or move_to_column > 6:
+        if move_to_column < 3 or move_to_column > 5:
             return False
         # Makes sure the move is within the palace.
         if self._board[move_from_row][move_from_column] == "BGEN":
@@ -363,14 +485,13 @@ class XiangqiGame:
         if self._board[move_from_row][move_from_column][1:4] != "ADV":
             return False
         # Makes sure the move to space is empty.
-        if self._board[move_to_row][move_to_column] != "    ":
-            return False
+        # if self._board[move_to_row][move_to_column] != "    ":
+        #     return False
         # Make sure there isn't a similar color piece in the way
         if self._board[move_from_row][move_from_column] == "BADV" and \
                 self._board[move_to_row][move_to_column][0] == "B":
             return False
         # Make sure there isn't a similar color piece in the way
-        print("move to", self._board[move_to_row][move_to_column])
         if self._board[move_from_row][move_from_column] == "RADV" and \
                 self._board[move_to_row][move_to_column][0] == "R":
             return False
@@ -901,7 +1022,7 @@ class XiangqiGame:
 # print()
 # game.print_board()
 
-# game = XiangqiGame()
+game = XiangqiGame()
 # move_result = game.make_move('c1', 'e3')
 # print(move_result)
 # black_in_check = game.is_in_check('black')
@@ -909,4 +1030,26 @@ class XiangqiGame:
 # print(game.make_move('e7', 'e6'))
 # state = game.get_game_state()
 #
+# game.print_board()
+# game.black_general_in_check()
+# print(game.black_checkmate())
+# print()
+# game.print_board()
+# game.make_move("d10", "e9")
+# print()
+# game.print_board()
+# print(game.is_in_check("black"))
+# print()
+# game.print_board()
+#
+# print(game.is_in_check("black"))
+# print()
+# game.print_board()
+# print(game.black_checkmate())
+#
+# print()
+# game.print_board()
+# print(game.is_in_check("black"))
+# game.make_move("f1", "f10")
+# print()
 # game.print_board()
