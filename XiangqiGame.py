@@ -8,6 +8,8 @@
 
 # ** CHECK THAT THE BOARD, PLAYERS TURN, AND GENERAL POSITIONS ARE CORRECT**
 
+# *** Label columns and rows***
+
 from copy import deepcopy
 
 class XiangqiGame:
@@ -138,8 +140,12 @@ class XiangqiGame:
         For testing, prints the game board.
         :return: nothing.
         """
+        row_number = 1
+        print("  ", "A", "      ", "B", "     ", "C", "     ", "D", "     ", "E", "     ", "F", "     ", "G", "    ",
+              "H", "     ", "I")
         for row in self._board:
-            print(row)
+            print(row, row_number)
+            row_number += 1
 
     def get_turn(self):
         """
@@ -1248,4 +1254,5 @@ class XiangqiGame:
 # game.print_board()
 # game.make_move("f1", "f2")
 # print()
+# game = XiangqiGame()
 # game.print_board()
