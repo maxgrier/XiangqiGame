@@ -10,16 +10,19 @@
 
 # *** Label columns and rows*** I think I did that...
 
-from copy import deepcopy
+# from copy import deepcopy
 
-# def deepcopy(list_of_list):
-#     new_list_of_list = []
-#     for lst in list_of_list:
-#         sub_list = []
-#         for item in lst:
-#             sub_list.append(item)
-#         new_list_of_list.append(sub_list)
-#     return new_list_of_list
+def deepcopy(item_to_copy):
+    new_copied_item = []
+    if isinstance(item_to_copy, list):
+        for lst in item_to_copy:
+            sub_list = []
+            for item in lst:
+                sub_list.append(item)
+            new_copied_item.append(sub_list)
+    else:
+        new_copied_item = item_to_copy
+    return new_copied_item
 
 
 class XiangqiGame:
@@ -1335,8 +1338,8 @@ class XiangqiGame:
 # game.print_board()
 # game.make_move("f1", "f2")
 # print()
-game = XiangqiGame()
-game.print_board()
+# game = XiangqiGame()
+# game.print_board()
 # game.make_move("f1", "e2")
 # print()
 # game.print_board()
@@ -1379,12 +1382,12 @@ game.print_board()
 # print()
 # game.print_board()
 
-game.make_move("e3", "e2")
-print()
-game.print_board()
-game.get_turn()
-game.make_move("f10", "f1")
-print()
-game.print_board()
-game.get_turn()
-print(game.get_game_state())
+# game.make_move("e3", "e2")
+# print()
+# game.print_board()
+# game.get_turn()
+# game.make_move("f10", "f1")
+# print()
+# game.print_board()
+# game.get_turn()
+# print(game.get_game_state())
