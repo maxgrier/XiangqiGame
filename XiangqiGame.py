@@ -8,9 +8,19 @@
 
 # ** CHECK THAT THE BOARD, PLAYERS TURN, AND GENERAL POSITIONS ARE CORRECT**
 
-# *** Label columns and rows***
+# *** Label columns and rows*** I think I did that...
 
 from copy import deepcopy
+
+# def deepcopy(list_of_list):
+#     new_list_of_list = []
+#     for lst in list_of_list:
+#         sub_list = []
+#         for item in lst:
+#             sub_list.append(item)
+#         new_list_of_list.append(sub_list)
+#     return new_list_of_list
+
 
 class XiangqiGame:
     """
@@ -58,16 +68,16 @@ class XiangqiGame:
         #                ['    ', '    ', '    ', '    ', 'BGEN', '    ', '    ', '    ', '    ']]
 
         #         # Black checkmate
-        # self._board = [['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', 'RGEN', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', 'RCHA', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', 'BGEN', '    ', '    ', '    '],
-        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ']]
+        self._board = [['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', 'RGEN', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', 'RSOL', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+                       ['    ', '    ', '    ', '    ', '    ', 'BGEN', '    ', '    ', '    ']]
 
                 # RED checkmate
         # self._board = [['    ', '    ', '    ', '    ', '    ', 'RGEN', '    ', '    ', '    '],
@@ -80,6 +90,16 @@ class XiangqiGame:
         #                ['    ', '    ', '    ', '    ', '    ', 'BSOL', '    ', '    ', '    '],
         #                ['    ', '    ', '    ', '    ', '    ', 'BCAN', '    ', '    ', '    '],
         #                ['    ', '    ', '    ', '    ', 'BGEN', '    ', '    ', '    ', '    ']]
+        # self._board = [['RCHA', 'RHOR', '    ', 'RADV', 'RGEN', '    ', 'RELE', 'RHOR', 'RCHA'],
+        #                ['    ', '    ', '    ', '    ', 'RADV', '    ', '    ', '    ', '    '],
+        #                ['RELE', 'RCAN', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['RSOL', '    ', 'RSOL', '    ', '    ', '    ', '    ', '    ', 'RSOL'],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', '    ', '    ', '    ', '    ', 'BSOL', '    ', '    '],
+        #                ['BSOL', '    ', 'BSOL', '    ', '    ', '    ', '    ', '    ', 'BSOL'],
+        #                ['    ', 'BCAN', 'BHOR', '    ', 'BCHA', '    ', 'RCAN', '    ', 'BHOR'],
+        #                ['BCHA', '    ', '    ', '    ', '    ', '    ', '    ', '    ', '    '],
+        #                ['    ', '    ', 'BELE', 'BADV', 'BGEN', 'BADV', 'BELE', '    ', 'BCHA']]
         self._game_state = "UNFINISHED"
         self._players_turn = "RED"
         self._black_in_check = False
@@ -476,6 +496,12 @@ class XiangqiGame:
         move_from_row = int(move_from[1:3]) - 1
         move_to_row = int(move_to[1:3]) - 1
 
+        before_spot = deepcopy(self._board[move_from_row][move_from_column])
+        after_spot = deepcopy(self._board[move_to_row][move_to_column])
+
+        if self._board[move_from_row][move_from_column][0] == self._board[move_to_row][move_to_column][0]:
+            return False
+
         # Checks to see that the player's turn matches the piece being moved.
         if self._players_turn[0] != self._board[move_from_row][move_from_column][0]:
             return False
@@ -527,6 +553,22 @@ class XiangqiGame:
         if self._board[move_from_row][move_from_column][1:4] == "SOL":
             move_completed = self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
+        if move_completed is True:
+            if before_spot[0] == "R":
+                if self.red_general_in_check() is True:
+                    self._board[move_to_row][move_to_column] = after_spot
+                    self._board[move_from_row][move_from_column] = before_spot
+                    move_completed = False
+                else:
+                    self._players_turn = "BLACK"
+            elif before_spot[0] == "B":
+                if self.black_general_in_check() is True:
+                    self._board[move_to_row][move_to_column] = after_spot
+                    self._board[move_from_row][move_from_column] = before_spot
+                    move_completed = False
+                else:
+                    self._players_turn = "RED"
+
         if self._players_turn == "RED":
             if self.red_checkmate() is True:
                 self._game_state = "BLACK_WON"
@@ -538,7 +580,6 @@ class XiangqiGame:
                 self._game_state = "RED_WON"
             else:
                 self._game_state = "UNFINISHED"
-        print("move completed", move_completed)
         return move_completed
 
         # if self.red_general_in_check() is True:
@@ -642,14 +683,14 @@ class XiangqiGame:
                 self._black_general_column = move_to_column
                 self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
                 self._board[move_from_row][move_from_column] = "    "
-                self._players_turn = "RED"
+                # self._players_turn = "RED"
                 return True
             if self._board[move_from_row][move_from_column] == "RGEN":
                 self._red_general_row = move_to_row
                 self._red_general_column = move_to_column
                 self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
                 self._board[move_from_row][move_from_column] = "    "
-                self._players_turn = "BLACK"
+                # self._players_turn = "BLACK"
                 return True
 
     def advisor_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
@@ -698,12 +739,8 @@ class XiangqiGame:
                 self._board[move_to_row][move_to_column][0] == "R":
             return False
         else:
-            self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
+            self._board[move_to_row][move_to_column] = deepcopy(self._board[move_from_row][move_from_column])
             self._board[move_from_row][move_from_column] = "    "
-            if self._players_turn == "RED":
-                self._players_turn = "BLACK"
-            elif self._players_turn == "BLACK":
-                self._players_turn = "RED"
             return True
 
     def elephant_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
@@ -754,10 +791,10 @@ class XiangqiGame:
         # Else.
         self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
         self._board[move_from_row][move_from_column] = "    "
-        if self._players_turn == "RED":
-            self._players_turn = "BLACK"
-        elif self._players_turn == "BLACK":
-            self._players_turn = "RED"
+        # if self._players_turn == "RED":
+        #     self._players_turn = "BLACK"
+        # elif self._players_turn == "BLACK":
+        #     self._players_turn = "RED"
         return True
 
     def horse_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
@@ -821,10 +858,10 @@ class XiangqiGame:
         # Else.
         self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
         self._board[move_from_row][move_from_column] = "    "
-        if self._players_turn == "RED":
-            self._players_turn = "BLACK"
-        elif self._players_turn == "BLACK":
-            self._players_turn = "RED"
+        # if self._players_turn == "RED":
+        #     self._players_turn = "BLACK"
+        # elif self._players_turn == "BLACK":
+        #     self._players_turn = "RED"
         return True
 
     def chariot_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
@@ -882,13 +919,57 @@ class XiangqiGame:
                 for column in range(move_from_column - 1, move_to_column - 1, -1):
                     if self._board[move_from_row][column][0] == "B":
                         return False
+        # Checks if there is a piece in between to block.
+        if self._board[move_from_row][move_from_column][0] == "R":
+            if self._board[move_to_row][move_to_column][0] == "B":
+                piece_count = 0
+                if move_to_row - move_from_row > 0:
+                    for row in range(move_from_row + 1, move_to_row):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_row - move_from_row < 0:
+                    for row in range(move_from_row - 1, move_to_row - 1, -1):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column > 0:
+                    for column in range(move_from_column + 1, move_to_column):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column < 1:
+                    for column in range(move_from_column - 1, move_to_column, -1):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if piece_count > 0:
+                    return False
+        # Checks if there is a piece in between to block.
+        if self._board[move_from_row][move_from_column][0] == "B":
+            if self._board[move_to_row][move_to_column][0] == "R":
+                piece_count = 0
+                if move_to_row - move_from_row > 0:
+                    for row in range(move_from_row + 1, move_to_row + 1):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_row - move_from_row < 0:
+                    for row in range(move_from_row - 1, move_to_row, -1):
+                        if self._board[row][move_from_column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column > 0:
+                    for column in range(move_from_column + 1, move_to_column):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if move_to_column - move_from_column < 1:
+                    for column in range(move_from_column - 1, move_to_column, -1):
+                        if self._board[move_from_row][column] != "    ":
+                            piece_count += 1
+                if piece_count > 0:
+                    return False
         # Else.
         self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
         self._board[move_from_row][move_from_column] = "    "
-        if self._players_turn == "RED":
-            self._players_turn = "BLACK"
-        elif self._players_turn == "BLACK":
-            self._players_turn = "RED"
+        # if self._players_turn == "RED":
+        #     self._players_turn = "BLACK"
+        # elif self._players_turn == "BLACK":
+        #     self._players_turn = "RED"
         return True
 
     def cannon_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
@@ -925,11 +1006,11 @@ class XiangqiGame:
                         if self._board[row][move_from_column] != "    ":
                             piece_count += 1
                 if move_to_column - move_from_column > 0:
-                    for column in range(move_from_column + 1, move_to_column + 1):
+                    for column in range(move_from_column + 1, move_to_column):
                         if self._board[move_from_row][column] != "    ":
                             piece_count += 1
                 if move_to_column - move_from_column < 1:
-                    for column in range(move_from_column - 1, move_to_column - 1, -1):
+                    for column in range(move_from_column - 1, move_to_column, -1):
                         if self._board[move_from_row][column] != "    ":
                             piece_count += 1
                 if piece_count == 1:
@@ -955,11 +1036,11 @@ class XiangqiGame:
                         if self._board[row][move_from_column] != "    ":
                             piece_count += 1
                 if move_to_column - move_from_column > 0:
-                    for column in range(move_from_column + 1, move_to_column + 1):
+                    for column in range(move_from_column + 1, move_to_column):
                         if self._board[move_from_row][column] != "    ":
                             piece_count += 1
                 if move_to_column - move_from_column < 1:
-                    for column in range(move_from_column - 1, move_to_column - 1, -1):
+                    for column in range(move_from_column - 1, move_to_column, -1):
                         if self._board[move_from_row][column] != "    ":
                             piece_count += 1
                 if piece_count == 1:
@@ -1017,10 +1098,10 @@ class XiangqiGame:
                         return False
         self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
         self._board[move_from_row][move_from_column] = "    "
-        if self._players_turn == "RED":
-            self._players_turn = "BLACK"
-        elif self._players_turn == "BLACK":
-            self._players_turn = "RED"
+        # if self._players_turn == "RED":
+        #     self._players_turn = "BLACK"
+        # elif self._players_turn == "BLACK":
+        #     self._players_turn = "RED"
         return True
 
     def soldier_move(self, move_from_row, move_from_column, move_to_row, move_to_column):
@@ -1064,10 +1145,10 @@ class XiangqiGame:
                 return False
         self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
         self._board[move_from_row][move_from_column] = "    "
-        if self._players_turn == "RED":
-            self._players_turn = "BLACK"
-        elif self._players_turn == "BLACK":
-            self._players_turn = "RED"
+        # if self._players_turn == "RED":
+        #     self._players_turn = "BLACK"
+        # elif self._players_turn == "BLACK":
+        #     self._players_turn = "RED"
         return True
 
 
@@ -1254,5 +1335,56 @@ class XiangqiGame:
 # game.print_board()
 # game.make_move("f1", "f2")
 # print()
-# game = XiangqiGame()
+game = XiangqiGame()
+game.print_board()
+# game.make_move("f1", "e2")
+# print()
 # game.print_board()
+# game.make_move("b10", "c8")
+# print()
+# game.print_board()
+# game.make_move("c1", "a3")
+# print()
+# game.print_board()
+# game.make_move("a10", "a9")
+# print()
+# game.print_board()
+# game.make_move("g4", "g5")
+# print()
+# game.print_board()
+# game.make_move("h8", "g8")
+# print()
+# game.print_board()
+# game.make_move("h3", "g3")
+# print()
+# game.print_board()
+# game.make_move("h10", "i8")
+# print()
+# game.print_board()
+# game.make_move("g5", "g6")
+# print()
+# game.print_board()
+# game.make_move("g7", "g6")
+# print()
+# game.print_board()
+# game.make_move("g3", "g8")
+# print()
+# game.print_board()
+
+# game.make_move("g8", "b8")
+# print()
+# game.print_board()
+
+# game.make_move("h3", "h10")
+# print()
+# game.print_board()
+
+game.make_move("e3", "e2")
+print()
+game.print_board()
+game.get_turn()
+game.make_move("f10", "f1")
+print()
+game.print_board()
+game.get_turn()
+print(game.get_game_state())
