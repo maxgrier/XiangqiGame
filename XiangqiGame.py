@@ -689,7 +689,7 @@ class XiangqiGame:
             if move_to_row > 5:
                 return False
         if self._board[move_from_row][move_from_column][0] == "B":
-            if move_to_row < 6:
+            if move_to_row < 5:
                 return False
 
         # Make sure there isn't a similar color piece in the way
@@ -737,20 +737,33 @@ class XiangqiGame:
         # Checks to see if a piece is blocking the horse
         if move_to_column - move_from_column > 0:
             if move_to_row - move_from_row > 1:
-                if self._board[move_from_row + 1][move_from_column] != "    ":
-                    return False
+                if abs(move_to_row - move_from_row) == 2:
+                    if self._board[move_from_row + 1][move_from_column] != "    ":
+                        return False
+                if abs(move_to_column - move_to_column) == 2:
+                    if self._board[move_from_row][move_from_column + 1] != "    ":
+                        return False
         if move_to_column - move_from_column < 1:
             if move_to_row - move_from_row < 1:
-                if self._board[move_from_row - 1][move_from_column] != "    ":
-                    return False
+                if move_from_column - move_to_column == 2:
+                    if self._board[move_from_row][move_from_column - 1] != "    ":
+                        return False
+                if move_from_row - move_to_row == 2:
+                    if self._board[move_from_row - 1][move_from_column] != "    ":
+                        return False
         if move_to_column - move_from_column > 0:
             if move_to_row - move_from_row < 1:
-                if self._board[move_from_row - 1][move_from_column] != "    ":
-                    return False
+                if abs(move_from_column - move_to_column) == 2:
+                    if self._board[move_from_row][move_from_column + 1] != "    ":
+                        return False
+                if abs(move_from_row - move_to_row) == 2:
+                    if self._board[move_from_row - 1][move_from_column] != "    ":
+                        return False
         if move_to_column - move_from_column < 1:
             if move_to_row - move_from_row > 1:
-                if self._board[move_from_row + 1][move_from_column] != "    ":
-                    return False
+                if abs(move_from_row - move_to_row) == 2:
+                    if self._board[move_from_row + 1][move_from_column] != "    ":
+                        return False
         # if there is a piece to the left.
         if move_to_column - move_from_column == -2:
             if self._board[move_from_row][move_from_column - 1] != "    ":
@@ -1312,3 +1325,132 @@ class XiangqiGame:
 # game.print_board()
 # print(game.get_game_state())
 # game.get_turn()
+
+# game = XiangqiGame()
+# game.print_board()
+# game.make_move("g7", "g6")
+# print()
+# game.print_board()
+# game.make_move("H3", "G3")
+# print()
+# game.print_board()
+# game.make_move("h8", "g8")
+# print()
+# game.print_board()
+# game.make_move("h1", "i3")
+# print()
+# game.print_board()
+# game.make_move("i7", "i6")
+# print()
+# game.print_board()
+# game.make_move("i1", "h1")
+# print()
+# game.print_board()
+# game.make_move("g10", "e8")
+# print()
+# game.print_board()
+# game.make_move("h1", "h9")
+# print()
+# game.print_board()
+# game.make_move("h10", "f9")
+# print()
+# game.print_board()
+# game.make_move("h9", "f9")
+# print()
+# game.print_board()
+# game.make_move("f10", "e9")
+# print()
+# game.print_board()
+# game.make_move("b3", "d3")
+# print()
+# game.print_board()
+# game.make_move("i10", "f10")
+# print()
+# game.print_board()
+# game.make_move("f9", "f10")
+# print()
+# game.print_board()
+# game.make_move("e9", "f10")
+# print()
+# game.print_board()
+# game.make_move("b1", "a3")
+# print()
+# game.print_board()
+# game.make_move("b8", "b1")
+# print()
+# game.print_board()
+# game.make_move("a1", "b1")
+# print()
+# game.print_board()
+# game.make_move("g8", "g4")
+# print()
+# game.print_board()
+# game.make_move("i3", "g4")
+# print()
+# game.print_board()
+# game.make_move("g6", "g5")
+# print()
+# game.print_board()
+# game.make_move("g3", "g5")
+# print()
+# game.print_board()
+# game.make_move("e8", "g6")
+# print()
+# game.print_board()
+# game.make_move("b1", "b9")
+# print()
+# game.print_board()
+# game.make_move("f10", "e9")
+# print()
+# game.print_board()
+# game.make_move("g5", "a5")
+# print()
+# game.print_board()
+# game.make_move("a7", "a6")
+# print()
+# game.print_board()
+# game.make_move("a5", "a10")
+# print()
+# game.print_board()
+# game.make_move("c10", "e8")
+# print()
+# game.print_board()
+# game.make_move("b9", "b10")
+# print()
+# game.print_board()
+# game.make_move("a6", "a5")
+# print()
+# game.print_board()
+# game.make_move("a4", "a5")
+# print()
+# game.print_board()
+# game.make_move("e9", "d8")
+# print()
+# game.print_board()
+# game.make_move("b10", "d10")
+# print()
+# game.print_board()
+# game.make_move("e10", "e9")
+# print()
+# game.print_board()
+# game.make_move("d10", "d9")
+# print()
+# game.print_board()
+# game.make_move("e9", "e10")
+# print()
+# game.print_board()
+# game.make_move("d3", "b3")
+# print()
+# game.print_board()
+# game.make_move("d8", "e9")
+# print()
+# game.print_board()
+# print(game.make_move("b3", "b10"))
+# print()
+# game.print_board()
+# print(game.make_move("e9", "d10"))
+# print()
+# game.print_board()
+#
+# print(game.get_game_state())
+# print(game.get_turn())
