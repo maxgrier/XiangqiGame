@@ -982,36 +982,36 @@ class XiangqiGame:
         if self._board[move_from_row][move_from_column][0] == "R":
             if move_to_row - move_from_row > 0:
                 for row in range(move_from_row + 1, move_to_row + 1):
-                    if self._board[row][move_from_column][0] == "R":
+                    if self._board[row][move_from_column] != "    ":
                         return False
             if move_to_row - move_from_row < 0:
                 for row in range(move_from_row - 1, move_to_row + 1, -1):
-                    if self._board[row][move_from_column][0] == "R":
+                    if self._board[row][move_from_column] != "    ":
                         return False
             if move_to_column - move_from_column > 0:
                 for column in range(move_from_column + 1, move_to_column + 1):
-                    if self._board[move_from_row][column][0] == "R":
+                    if self._board[move_from_row][column] != "    ":
                         return False
             if move_to_column - move_from_column < 1:
                 for column in range(move_from_column - 1, move_to_column - 1, -1):
-                    if self._board[move_from_row][column][0] == "R":
+                    if self._board[move_from_row][column] != "    ":
                         return False
         if self._board[move_from_row][move_from_column][0] == "B":
             if move_to_row - move_from_row > 1:
                 for row in range(move_from_row + 1, move_to_row + 1):
-                    if self._board[row][move_from_column][0] == "B":
+                    if self._board[row][move_from_column] != "    ":
                         return False
             if move_to_row - move_from_row < 0:
                 for row in range(move_from_row - 1, move_to_row, -1):
-                    if self._board[row][move_from_column][0] == "B":
+                    if self._board[row][move_from_column] != "    ":
                         return False
             if move_to_column - move_from_column > 0:
                 for column in range(move_from_column + 1, move_to_column + 1):
-                    if self._board[move_from_row][column][0] == "B":
+                    if self._board[move_from_row][column] != "    ":
                         return False
             if move_to_column - move_from_column < 1:
                 for column in range(move_from_column - 1, move_to_column - 1, -1):
-                    if self._board[move_from_row][column][0] == "B":
+                    if self._board[move_from_row][column] != "    ":
                         return False
 
         # If it passes all the conditions, make the move.
