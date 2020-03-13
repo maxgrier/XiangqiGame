@@ -1,5 +1,5 @@
 # Author: Max Grier
-# Date: 2/29/2020
+# Date: 3/12/2020
 # Description: Portfolio Project: This program contain code to play Chinese Chess (xiangqi).
 # It will contain various functions that will hold the rules to each piece's move abilities
 # and keep track of the game state throughout the game until it is finished.
@@ -22,14 +22,15 @@ def my_deepcopy(item_to_copy):
 
 class XiangqiGame:
     """
-    This is the main class that contains the Chinese chess game.  It will have multiple functions
-    to help it perform everything that is needed.  This will include all of the needed moves per piece
-    as well as methods to see if generals are in check and checkmate.
+    This is the main class that contains the Chinese chess game.
+    It will have multiple functions to help it perform everything that is needed.
+    This will include all of the needed moves per piece as well as
+    methods to see if generals are in check and checkmate.
     """
     def __init__(self):
         """
-        Set the board to it's default status, as well as set game state, players turn, if black is in check
-        and if red is in check.
+        Set the board to it's default status, as well as set game state,
+        players turn, if black is in check and if red is in check.
         """
 
         # Set the initial board with it's pieces.
@@ -102,22 +103,14 @@ class XiangqiGame:
                     self._black_general_column = column
         return self._black_general_column
 
-    def get_gen_pos(self):
-        """
-        Summary: For testing purposes to look at the general's poition.
-        :return: Nothing
-        """
-        print("r row", self._red_general_row, "r col", self._red_general_column)
-        print("b row", self._black_general_row, "b col", self._black_general_column)
-
     def print_board(self):
         """
         For testing, prints the game board.
         :return: nothing.
         """
         row_number = 1
-        print("  ", "A", "      ", "B", "     ", "C", "     ", "D", "     ", "E", "     ", "F", "     ", "G", "    ",
-              "H", "     ", "I")
+        print("  ", "A", "      ", "B", "     ", "C", "     ", "D", "     ", "E", "     ",
+              "F", "     ", "G", "    ", "H", "     ", "I")
         for row in self._board:
             print(row, row_number)
             row_number += 1
@@ -341,9 +334,10 @@ class XiangqiGame:
         for row in range(10):
             for column in range(9):
 
-                # If we find a piece in a cell, we run that piece's move for every possible move it can make.
-                # If that stops the general from being in check, then we set checkmate to False,
-                # set the board back to how it was, and eventually return checkmate.
+                # If we find a piece in a cell, we run that piece's move for every
+                # possible move it can make. If that stops the general from being in check,
+                # then we set checkmate to False, set the board back to how it was,
+                # and eventually return checkmate.
                 if self._board[row][column] == "RGEN":
                     for row_position in range(10):
                         for column_position in range(9):
@@ -479,9 +473,8 @@ class XiangqiGame:
         if self._board[move_from_row][move_from_column][1:4] == "SOL":
             move_completed = self.soldier_move(move_from_row, move_from_column, move_to_row, move_to_column)
 
-        # If the move was successful, but the move put that player's general in check,
-        # it will undo the move and return False.
-        # Otherwise, the move is complete and we change the player's turn.
+        # If the move was successful, but the move put the general in check, it will undo
+        # the move and return False. Otherwise, complete move and change the player's turn.
         if move_completed is True:
             if spot_before_move[0] == "R":
                 if self.red_general_in_check() is True:
@@ -764,6 +757,7 @@ class XiangqiGame:
                 if abs(move_from_row - move_to_row) == 2:
                     if self._board[move_from_row + 1][move_from_column] != "    ":
                         return False
+
         # if there is a piece to the left.
         if move_to_column - move_from_column == -2:
             if self._board[move_from_row][move_from_column - 1] != "    ":
@@ -825,6 +819,7 @@ class XiangqiGame:
                 for column in range(move_from_column - 1, move_to_column - 1, -1):
                     if self._board[move_from_row][column][0] == "R":
                         return False
+
         # Makes sure there are no pieces in the way when moving.
         if self._board[move_from_row][move_from_column][0] == "B":
             if move_to_row - move_from_row > 1:
@@ -866,6 +861,7 @@ class XiangqiGame:
                             piece_count += 1
                 if piece_count > 0:
                     return False
+
         # Checks if there is a piece in between to block the chariot.
         if self._board[move_from_row][move_from_column][0] == "B":
             if self._board[move_to_row][move_to_column][0] == "R":
@@ -904,9 +900,6 @@ class XiangqiGame:
         :return: True or False based on if the move was valid.
         """
 
-        # Set piece count to 0 (for attacking).
-        piece_count = 0
-
         # Makes sure the cannon is moving along the same row or column.
         if move_to_column != move_from_column:
             if move_to_row != move_from_row:
@@ -921,6 +914,8 @@ class XiangqiGame:
         if abs(move_to_row - move_from_row) > 9:
             return False
 
+        # Set piece count to 0 (for attacking).
+        piece_count = 0
         # Checks if there is a piece in between to allow a capture.
         if self._board[move_from_row][move_from_column][0] == "R":
             if self._board[move_to_row][move_to_column][0] == "B":
@@ -951,6 +946,7 @@ class XiangqiGame:
                     return True
                 else:
                     return False
+
         # Checks if there is a piece in between to allow a capture.
         if self._board[move_from_row][move_from_column][0] == "B":
             if self._board[move_to_row][move_to_column][0] == "R":
@@ -1070,387 +1066,3 @@ class XiangqiGame:
         self._board[move_to_row][move_to_column] = self._board[move_from_row][move_from_column]
         self._board[move_from_row][move_from_column] = "    "
         return True
-
-
-
-# Various test code
-
-# game = XiangqiGame()
-# game.print_board()
-# print(game.get_game_state())
-# # game.print_board()
-# print(game.is_in_check("REd"))
-# print(game.is_in_check("black"))
-# print(game.is_in_check("RE"))
-# word = "b1"
-# print(word[1:3])
-# game.make_move("b5", "c10")
-# game.print_board()
-# print()
-# game.make_move("e1", "e2")
-# game.make_move("e2", "f2")
-# game.make_move("e10", "e9")
-# game.make_move("e9", "f9")
-# game.make_move("e9", "d9")
-# game.make_move("d10", "e9")
-# game.make_move("e10", "D10")
-# game.make_move("d10", "e9")
-# game.make_move("h3", "h10")
-# game.print_board()
-# game.get_turn()
-# game.make_move("f1", "e2")
-# game.get_turn()
-#game.make_move("e10", "e9")
-# game.make_move("f10", "e9")
-
-
-
-# Soldier moves
-# game.make_move("e4", "e5")
-# print()
-# game.print_board()
-# game.make_move("e7", "e6")
-# print()
-# game.print_board()
-# game.get_turn()
-# game.make_move("e5", "e6")
-# print()
-# game.print_board()
-# game.make_move("a7", "a6")
-# print()
-# game.print_board()
-# game.make_move("e6", "f6")
-# print()
-# game.print_board()
-# game.make_move("a6", "a5")
-# print()
-# game.print_board()
-# game.make_move("a6", "a5")
-# print()
-# game.print_board()
-# game.make_move("f6", "g6")
-# print()
-# game.print_board()
-# game.make_move("a5", "a4")
-# print()
-# game.print_board()
-
-# test elephant moves
-# game.make_move("c1", "a3")
-# print()
-# game.print_board()
-#
-# game.make_move("c10", "a8")
-# print()
-# game.print_board()
-#
-# game.make_move("a3", "c5")
-# print()
-# game.print_board()
-#
-# game.make_move("a8", "c6")
-# print()
-# game.print_board()
-#
-# game.make_move("c5", "a7")
-# print()
-# game.print_board()
-
-# Horse stuff
-# game.make_move("b1", "c3")
-# # print()
-# # game.print_board()
-#
-# game.make_move("b10", "a8")
-# print()
-# game.print_board()
-#
-# game.make_move("c3", "e2")
-# print()
-# game.print_board()
-#
-# game.make_move("a8", "b10")
-# print()
-# game.print_board()
-
-
-# game = XiangqiGame()
-# move_result = game.make_move('c1', 'e3')
-# black_in_check = game.is_in_check('black')
-# game.make_move('e7', 'e6')
-# state = print(game.get_game_state())
-
-# Chariot moves
-# game.make_move("a1", "a2")
-# print()
-# game.print_board()
-#
-# game.make_move("a10", "a9")
-# print()
-# game.print_board()
-#
-# game.make_move("a2", "g2")
-# print()
-# game.print_board()
-#
-# game.make_move("a9", "a8")
-# print()
-# game.print_board()
-#
-# game.make_move("g2", "g1")
-# print()
-# game.print_board()
-
-# Cannon moves
-# game.make_move("b3", "b10")
-# print()
-# game.print_board()
-#
-# game.make_move("h8", "h1")
-# print()
-# game.print_board()
-#
-# game.make_move("e5", "e10")
-# print()
-# game.print_board()
-
-# game.make_move("e8", "e9")
-# print()
-# game.print_board()
-
-# print(game.is_in_check("black"))
-# print()
-# game.print_board()
-
-# game = XiangqiGame()
-# # move_result = game.make_move('c1', 'e3')
-# # print(move_result)
-# black_in_check = game.is_in_check('RED')
-# print(black_in_check)
-# # print(game.make_move('e7', 'e6'))
-# state = game.get_game_state()
-# print(state)
-#
-# game.print_board()
-# game.black_general_in_check()
-# print(game.black_checkmate())
-# print()
-# game.print_board()
-# game.make_move("d10", "e9")
-# print()
-# game.print_board()
-# print(game.is_in_check("black"))
-# print()
-# game.print_board()
-#
-# print(game.is_in_check("black"))
-# print()
-# game.print_board()
-# print(game.black_checkmate())
-#
-# print()
-# game.print_board()
-# print(game.is_in_check("black"))
-# game.make_move("f1", "f10")
-# print()
-# game.print_board()
-
-# game.get_gen_pos()
-#
-# game.print_board()
-# game.make_move("f1", "f2")
-# print()
-# game = XiangqiGame()
-# game.print_board()
-# game.make_move("f1", "e2")
-# print()
-# game.print_board()
-# game.make_move("b10", "c8")
-# print()
-# game.print_board()
-# game.make_move("c1", "a3")
-# print()
-# game.print_board()
-# game.make_move("a10", "a9")
-# print()
-# game.print_board()
-# game.make_move("g4", "g5")
-# print()
-# game.print_board()
-# game.make_move("h8", "g8")
-# print()
-# game.print_board()
-# game.make_move("h3", "g3")
-# print()
-# game.print_board()
-# game.make_move("h10", "i8")
-# print()
-# game.print_board()
-# game.make_move("g5", "g6")
-# print()
-# game.print_board()
-# game.make_move("g7", "g6")
-# print()
-# game.print_board()
-# game.make_move("g3", "g8")
-# print()
-# game.print_board()
-
-# game.make_move("g8", "b8")
-# print()
-# game.print_board()
-
-# game.make_move("h3", "h10")
-# print()
-# game.print_board()
-
-# game.make_move("e3", "e2")
-# print()
-# game.print_board()
-# game.get_turn()
-# game.make_move("f10", "f1")
-# print()
-# game.print_board()
-# game.get_turn()
-# print(game.get_game_state())
-# game.make_move("f8", 'f9')
-# print()
-# game.print_board()
-# print(game.get_game_state())
-# game.get_turn()
-# game.make_move("f10", 'f9')
-# game = XiangqiGame()
-# game.make_move("f9", "f3")
-# print()
-# game.print_board()
-# print(game.get_game_state())
-# game.get_turn()
-
-# game = XiangqiGame()
-# game.print_board()
-# game.make_move("g7", "g6")
-# print()
-# game.print_board()
-# game.make_move("H3", "G3")
-# print()
-# game.print_board()
-# game.make_move("h8", "g8")
-# print()
-# game.print_board()
-# game.make_move("h1", "i3")
-# print()
-# game.print_board()
-# game.make_move("i7", "i6")
-# print()
-# game.print_board()
-# game.make_move("i1", "h1")
-# print()
-# game.print_board()
-# game.make_move("g10", "e8")
-# print()
-# game.print_board()
-# game.make_move("h1", "h9")
-# print()
-# game.print_board()
-# game.make_move("h10", "f9")
-# print()
-# game.print_board()
-# game.make_move("h9", "f9")
-# print()
-# game.print_board()
-# game.make_move("f10", "e9")
-# print()
-# game.print_board()
-# game.make_move("b3", "d3")
-# print()
-# game.print_board()
-# game.make_move("i10", "f10")
-# print()
-# game.print_board()
-# game.make_move("f9", "f10")
-# print()
-# game.print_board()
-# game.make_move("e9", "f10")
-# print()
-# game.print_board()
-# game.make_move("b1", "a3")
-# print()
-# game.print_board()
-# game.make_move("b8", "b1")
-# print()
-# game.print_board()
-# game.make_move("a1", "b1")
-# print()
-# game.print_board()
-# game.make_move("g8", "g4")
-# print()
-# game.print_board()
-# game.make_move("i3", "g4")
-# print()
-# game.print_board()
-# game.make_move("g6", "g5")
-# print()
-# game.print_board()
-# game.make_move("g3", "g5")
-# print()
-# game.print_board()
-# game.make_move("e8", "g6")
-# print()
-# game.print_board()
-# game.make_move("b1", "b9")
-# print()
-# game.print_board()
-# game.make_move("f10", "e9")
-# print()
-# game.print_board()
-# game.make_move("g5", "a5")
-# print()
-# game.print_board()
-# game.make_move("a7", "a6")
-# print()
-# game.print_board()
-# game.make_move("a5", "a10")
-# print()
-# game.print_board()
-# game.make_move("c10", "e8")
-# print()
-# game.print_board()
-# game.make_move("b9", "b10")
-# print()
-# game.print_board()
-# game.make_move("a6", "a5")
-# print()
-# game.print_board()
-# game.make_move("a4", "a5")
-# print()
-# game.print_board()
-# game.make_move("e9", "d8")
-# print()
-# game.print_board()
-# game.make_move("b10", "d10")
-# print()
-# game.print_board()
-# game.make_move("e10", "e9")
-# print()
-# game.print_board()
-# game.make_move("d10", "d9")
-# print()
-# game.print_board()
-# game.make_move("e9", "e10")
-# print()
-# game.print_board()
-# game.make_move("d3", "b3")
-# print()
-# game.print_board()
-# game.make_move("d8", "e9")
-# print()
-# game.print_board()
-# print(game.make_move("b3", "b10"))
-# print()
-# game.print_board()
-# print(game.make_move("e9", "d10"))
-# print()
-# game.print_board()
-#
-# print(game.get_game_state())
-# print(game.get_turn())
